@@ -19,7 +19,17 @@ type coRule struct {
 	matcher *ignore.GitIgnore
 }
 
-var ownerRegex = regexp.MustCompile(`(^@[a-zA-Z0-9_\-/]*$)|(?:[a-z0-9!#$%&'*+/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])`)
+func (c *Codeowners) calcOwnership(path string) []string {
+	for i := 0; i < len(c.rules); i++ {
+		rule := c.rules[i]
+
+		if rule.matcher.MatchesPath(path) {
+			return rule.owners
+		}
+	}
+
+	return []string{}
+}
 
 func FromFile(path string) (*Codeowners, error) {
 	rules, err := readRulesFromFile(path)
@@ -46,6 +56,8 @@ func readRulesFromFile(path string) ([]coRule, error) {
 
 	defer file.Close()
 
+	var ownerRegex = regexp.MustCompile(`(^@[a-zA-Z0-9_\-/]*$)|(?:[a-z0-9!#$%&'*+/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])`)
+
 	var rules []coRule
 
 	scanner := bufio.NewScanner(file)
@@ -61,7 +73,15 @@ func readRulesFromFile(path string) ([]coRule, error) {
 
 		matcher := ignore.CompileIgnoreLines(parts[0])
 
-		owners := parts[1:]
+		var owners []string
+
+		for i := 1; i < len(parts); i++ {
+			clean := strings.TrimSpace(parts[i])
+
+			if len(clean) > 0{
+				owners = append(owners, clean)
+			}
+		}
 
 		for i := 0; i < len(owners); i++ {
 			if !ownerRegex.MatchString(owners[i]) {
