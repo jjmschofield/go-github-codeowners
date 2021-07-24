@@ -1,4 +1,4 @@
-package engine
+package codeowners
 
 import (
 	"github.com/stretchr/testify/assert"
