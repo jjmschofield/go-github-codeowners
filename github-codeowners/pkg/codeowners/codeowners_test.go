@@ -28,6 +28,15 @@ func TestCodeowners_FromFile_Should_Load_Rules_When_Valid(t *testing.T){
 	assert.False(t, rule.matcher.MatchesPath("NOT_README.md"))
 }
 
+func TestCodeowners_FromFile_Should_Reverse_Rules(t *testing.T){
+	codeowners, err := FromFile(getAbsPath("/fixtures/VALID_RULES"))
+
+	assert.Nil(t, err)
+	assert.Equal(t, 2, len(codeowners.rules))
+
+	assert.Equal(t, "file-two", codeowners.rules[0].line)
+	assert.Equal(t, "file-one", codeowners.rules[1].line)
+}
 
 func TestCodeowners_FromFile_Should_Ignore_Comments(t *testing.T) {
 	codeowners, err := FromFile(getAbsPath("/fixtures/COMMENTED_LINE"))
