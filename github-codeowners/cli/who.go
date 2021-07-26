@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"github.com/jjmschofield/go-github-codeowners/github-codeowners/cli/internal"
 	"github.com/jjmschofield/go-github-codeowners/github-codeowners/pkg/codeowners"
 	"github.com/spf13/cobra"
 	"strings"
@@ -12,7 +13,7 @@ func WhoCmd() *cobra.Command {
 		Short:   "Prints the owner of the specified file",
 		Example: "github-codewners who README.md",
 		Args:    cobra.ExactArgs(1),
-		RunE: runWho,
+		RunE:    runWho,
 	}
 
 	cmd.Flags().BoolP("rule", "r", false, "Print the rule which the file matched against")
@@ -21,15 +22,17 @@ func WhoCmd() *cobra.Command {
 }
 
 func runWho(cmd *cobra.Command, args []string) error {
-	coPath, err := cmd.Flags().GetString("codeowners")
-	printRule, err := cmd.Flags().GetBool("rule")
-
+	coFilePath, err := internal.GetCodeOwnersFilePath(cmd)
 	if err != nil {
 		return err
 	}
 
-	co, err := codeowners.FromFile(strings.TrimSpace(coPath))
+	printRule, err := cmd.Flags().GetBool("rule")
+	if err != nil {
+		return err
+	}
 
+	co, err := codeowners.FromFile(coFilePath)
 	if err != nil {
 		return err
 	}

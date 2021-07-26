@@ -12,4 +12,5 @@ Flags:
 
 Global Flags:
   -c, --codeowners string   Path to the CODEOWNERS file relative to your current directory (default ".github/CODEOWNERS")
+  -d, --dir string          Path to the directory to explore with github-codeowners (default "./")
 

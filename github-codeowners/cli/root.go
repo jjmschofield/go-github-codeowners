@@ -26,6 +26,13 @@ func addFlags (cmd *cobra.Command){
 		".github/CODEOWNERS",
 		"Path to the CODEOWNERS file relative to your current directory",
 	)
+
+	cmd.PersistentFlags().StringP(
+		"dir",
+		"d",
+		"./",
+		"Path to the directory to explore with github-codeowners",
+	)
 }
 
 func addSubCommands (cmd *cobra.Command){
