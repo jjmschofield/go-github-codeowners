@@ -23,44 +23,47 @@ func AuditCmd() *cobra.Command {
 	return cmd
 }
 
+type auditOpts struct {
+	dir       string
+	coPath    string
+	output    string
+	printRule bool
+}
+
 func runAudit(cmd *cobra.Command, args []string) error {
-	dir, err := flags.GetTrimmedFlag(cmd, "dir")
+	opts, err := getAuditOpts(cmd)
 	if err != nil {
 		return err
 	}
 
-	coFilePath, err := flags.GetCodeOwnersFilePath(cmd)
+	co, err := codeowners.FromFile(opts.coPath)
 	if err != nil {
 		return err
 	}
 
-	output, err := flags.GetOutput(cmd)
+	paths, err := files.FindRecursively(opts.dir)
 	if err != nil {
 		return err
 	}
-
-	printRule, err := cmd.Flags().GetBool("rule")
-	if err != nil {
-		return err
-	}
-
-	co, err := codeowners.FromFile(coFilePath)
-	if err != nil {
-		return err
-	}
-
-	paths, err := files.FindRecursively(dir)
 
 	result := co.CalcManyOwnerships(paths)
 
-	switch output {
+	switch opts.output {
 	case "simple":
-		outputs.PrintSimple(cmd, result, outputs.PrintOpts{Path: true, Owners: !printRule,  Rule: printRule})
+		outputs.PrintSimple(
+			cmd,
+			result,
+			outputs.PrintOpts{Path: true, Owners: !opts.printRule, Rule: opts.printRule},
+		)
 	case "csv":
-		outputs.PrintCsv(cmd, result, outputs.PrintOpts{Path: true, Owners: true, Rule: printRule})
+		outputs.PrintCsv(
+			cmd,
+			result,
+			outputs.PrintOpts{Path: true, Owners: true, Rule: opts.printRule},
+		)
 	case "jsonl":
 		err := outputs.PrintJsonl(cmd, result)
-		if err != nil{
+		if err != nil {
 			return err
 		}
 
@@ -69,4 +72,33 @@ func runAudit(cmd *cobra.Command, args []string) error {
 	}
 
 	return nil
+}
+
+func getAuditOpts(cmd *cobra.Command) (auditOpts, error) {
+	dir, err := flags.GetTrimmedFlag(cmd, "dir")
+	if err != nil {
+		return auditOpts{}, err
+	}
+
+	coPath, err := flags.GetCodeOwnersFilePath(cmd)
+	if err != nil {
+		return auditOpts{}, err
+	}
+
+	output, err := flags.GetOutput(cmd)
+	if err != nil {
+		return auditOpts{}, err
+	}
+
+	printRule, err := cmd.Flags().GetBool("rule")
+	if err != nil {
+		return auditOpts{}, err
+	}
+
+	return auditOpts{
+		dir,
+		coPath,
+		output,
+		printRule,
+	}, nil
 }

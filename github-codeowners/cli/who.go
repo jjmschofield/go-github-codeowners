@@ -23,34 +23,38 @@ func WhoCmd() *cobra.Command {
 	return cmd
 }
 
+type whoOpts struct {
+	coPath    string
+	output    string
+	printRule bool
+}
+
 func runWho(cmd *cobra.Command, args []string) error {
-	coFilePath, err := flags.GetCodeOwnersFilePath(cmd)
+	opts, err := getWhoOpts(cmd)
 	if err != nil {
 		return err
 	}
 
-	printRule, err := cmd.Flags().GetBool("rule")
-	if err != nil {
-		return err
-	}
-
-	output, err := flags.GetOutput(cmd)
-	if err != nil {
-		return err
-	}
-
-	co, err := codeowners.FromFile(coFilePath)
+	co, err := codeowners.FromFile(opts.coPath)
 	if err != nil {
 		return err
 	}
 
 	result := co.CalcOwnership(args[0])
 
-	switch output {
+	switch opts.output {
 	case "simple":
-		outputs.PrintSimple(cmd, []codeowners.CalcResult{result}, outputs.PrintOpts{Path: false, Owners: !printRule, Rule: printRule})
+		outputs.PrintSimple(
+			cmd,
+			[]codeowners.CalcResult{result},
+			outputs.PrintOpts{Path: false, Owners: !opts.printRule, Rule: opts.printRule},
+		)
 	case "csv":
-		outputs.PrintCsv(cmd, []codeowners.CalcResult{result}, outputs.PrintOpts{Path: true, Owners: true, Rule: printRule})
+		outputs.PrintCsv(
+			cmd,
+			[]codeowners.CalcResult{result},
+			outputs.PrintOpts{Path: true, Owners: true, Rule: opts.printRule},
+		)
 	case "jsonl":
 		err := outputs.PrintJsonl(cmd, []codeowners.CalcResult{result})
 		if err != nil {
@@ -61,4 +65,27 @@ func runWho(cmd *cobra.Command, args []string) error {
 	}
 
 	return nil
+}
+
+func getWhoOpts(cmd *cobra.Command) (whoOpts, error) {
+	coPath, err := flags.GetCodeOwnersFilePath(cmd)
+	if err != nil {
+		return whoOpts{}, err
+	}
+
+	output, err := flags.GetOutput(cmd)
+	if err != nil {
+		return whoOpts{}, err
+	}
+
+	printRule, err := cmd.Flags().GetBool("rule")
+	if err != nil {
+		return whoOpts{}, err
+	}
+
+	return whoOpts{
+		coPath,
+		output,
+		printRule,
+	}, nil
 }
