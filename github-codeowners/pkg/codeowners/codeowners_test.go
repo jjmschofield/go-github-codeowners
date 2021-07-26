@@ -12,17 +12,37 @@ func TestCodeowners_calcOwnership_Should_Respect_Reference(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	assert.Equal(t, []string{"@global-owner1", "@global-owner2"}, codeowners.calcOwnership("some-random-file"))
-	assert.Equal(t, []string{"@js-owner"}, codeowners.calcOwnership("nested/file.js"))
-	assert.Equal(t, []string{"docs@example.com"}, codeowners.calcOwnership("docs.go"))
-	assert.Equal(t, []string{"@doctocat"}, codeowners.calcOwnership("/build/logs/log"))
-	assert.Equal(t, []string{"docs@example.com"}, codeowners.calcOwnership("anywhere/docs/getting-started.md")) // anywhere/ prevents /docs/ @doctocat from winning
-	// assert.Equal(t, []string{"@global-owner1", "@global-owner2"}, codeowners.calcOwnership("anywhere/docs/build-app/troubleshooting.md")) // TODO - the underlying ignore lib does not respect this
-	assert.Equal(t, []string{"@octocat"}, codeowners.calcOwnership("anywhere/apps/file"))
-	assert.Equal(t, []string{"@doctocat"}, codeowners.calcOwnership("/docs/file"))
-	assert.Equal(t, []string{"@doctocat"}, codeowners.calcOwnership("/docs/nested/file"))
-	assert.Equal(t, []string{"@octocat"}, codeowners.calcOwnership("/apps/file"))
-	assert.Equal(t, []string(nil), codeowners.calcOwnership("/apps/github"))
+	assert.Equal(t, []string{"@global-owner1", "@global-owner2"}, codeowners.CalcOwnership("some-random-file").Owners)
+	assert.Equal(t, "*       @global-owner1 @global-owner2", codeowners.CalcOwnership("some-random-file").Rule)
+
+	assert.Equal(t, []string{"@js-owner"}, codeowners.CalcOwnership("nested/file.js").Owners)
+	assert.Equal(t, "*.js    @js-owner", codeowners.CalcOwnership("nested/file.js").Rule)
+
+	assert.Equal(t, []string{"docs@example.com"}, codeowners.CalcOwnership("docs.go").Owners)
+	assert.Equal(t, "*.go docs@example.com", codeowners.CalcOwnership("docs.go").Rule)
+
+	assert.Equal(t, []string{"@doctocat"}, codeowners.CalcOwnership("/build/logs/log").Owners)
+	assert.Equal(t, "/build/logs/ @doctocat", codeowners.CalcOwnership("/build/logs/log").Rule)
+
+	assert.Equal(t, []string{"docs@example.com"}, codeowners.CalcOwnership("anywhere/docs/getting-started.md").Owners) // anywhere/ prevents /docs/ @doctocat from winning
+	assert.Equal(t, "docs/*  docs@example.com", codeowners.CalcOwnership("anywhere/docs/getting-started.md").Rule)
+
+	// assert.Equal(t, []string{"@global-owner1", "@global-owner2"}, codeowners.CalcOwnership("anywhere/docs/build-app/troubleshooting.md")) // TODO - the underlying ignore lib does not respect this
+
+	assert.Equal(t, []string{"@octocat"}, codeowners.CalcOwnership("anywhere/apps/file").Owners)
+	assert.Equal(t, "apps/ @octocat", codeowners.CalcOwnership("anywhere/apps/file").Rule)
+
+	assert.Equal(t, []string{"@doctocat"}, codeowners.CalcOwnership("/docs/file").Owners)
+	assert.Equal(t, "/docs/ @doctocat", codeowners.CalcOwnership("/docs/file").Rule)
+
+	assert.Equal(t, []string{"@doctocat"}, codeowners.CalcOwnership("/docs/nested/file").Owners)
+	assert.Equal(t, "/docs/ @doctocat", codeowners.CalcOwnership("/docs/nested/file").Rule)
+
+	assert.Equal(t, []string{"@octocat"}, codeowners.CalcOwnership("/apps/file").Owners)
+	assert.Equal(t, "/apps/ @octocat", codeowners.CalcOwnership("/apps/file").Rule)
+
+	assert.Equal(t, []string(nil), codeowners.CalcOwnership("/apps/github").Owners)
+	assert.Equal(t, "/apps/github ", codeowners.CalcOwnership("/apps/github").Rule)
 }
 
 func TestCodeowners_FromFile_Should_Load_Rules_When_Valid(t *testing.T) {

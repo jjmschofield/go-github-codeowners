@@ -19,16 +19,24 @@ type coRule struct {
 	matcher *ignore.GitIgnore
 }
 
-func (c *Codeowners) calcOwnership(path string) []string {
+type CalcResult struct {
+	Owners []string
+	Rule   string
+}
+
+func (c *Codeowners) CalcOwnership(path string) CalcResult {
 	for i := 0; i < len(c.rules); i++ {
 		rule := c.rules[i]
-		
+
 		if rule.matcher.MatchesPath(path) {
-			return rule.owners
+			return CalcResult{
+				Owners: rule.owners,
+				Rule:   rule.line,
+			}
 		}
 	}
 
-	return []string{}
+	return CalcResult{}
 }
 
 func FromFile(path string) (*Codeowners, error) {
@@ -78,7 +86,7 @@ func readRulesFromFile(path string) ([]coRule, error) {
 		for i := 1; i < len(parts); i++ {
 			clean := strings.TrimSpace(parts[i])
 
-			if len(clean) > 0{
+			if len(clean) > 0 {
 				owners = append(owners, clean)
 			}
 		}

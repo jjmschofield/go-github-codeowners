@@ -1,10 +1,10 @@
 package cli
 
 import (
-"errors"
-"fmt"
-"github.com/spf13/cobra"
-"os"
+	"errors"
+	"fmt"
+	"github.com/spf13/cobra"
+	"os"
 )
 
 var rootCmd = &cobra.Command{
@@ -13,6 +13,15 @@ var rootCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return errors.New("specify a command to run")
 	},
+}
+
+func init() {
+	rootCmd.PersistentFlags().StringP(
+		"codeowners",
+		"c",
+		".github/CODEOWNERS",
+		"Path to the CODEOWNERS file relative to your current directory",
+	)
 }
 
 func Execute() {
