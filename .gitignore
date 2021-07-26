@@ -1,3 +1,8 @@
+github-codeowners/pkg/files/fixtures/ROOT_IGNORE/.gitignore
+github-codeowners/pkg/files/fixtures/SUB_IGNORE/.gitignore
+github-codeowners/pkg/files/fixtures/SUB_IGNORE/level-1/.gitignore
+github-codeowners/pkg/files/fixtures/SUB_IGNORE/level-1/level-2/.gitignore
+
 # Binaries for programs and plugins
 *.exe
 *.exe~

@@ -22,7 +22,7 @@ type coRule struct {
 func (c *Codeowners) calcOwnership(path string) []string {
 	for i := 0; i < len(c.rules); i++ {
 		rule := c.rules[i]
-
+		
 		if rule.matcher.MatchesPath(path) {
 			return rule.owners
 		}
