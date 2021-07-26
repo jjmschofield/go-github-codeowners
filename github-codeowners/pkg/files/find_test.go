@@ -6,7 +6,7 @@ import (
 )
 
 func TestFiles_findRecursively_Should_Find_All_Files(t *testing.T) {
-	filePaths, err := FindRecursively("/fixtures/NO_IGNORE")
+	filePaths, err := FindRecursively("/.fixtures/NO_IGNORE")
 
 	assert.Nil(t, err)
 	assert.NotNil(t, filePaths)
@@ -18,14 +18,14 @@ func TestFiles_findRecursively_Should_Find_All_Files(t *testing.T) {
 }
 
 func TestFiles_findRecursively_Should_Ignore_Files_When_Root_Ignore(t *testing.T) {
-	err := OverwriteFile(GetAbsPath("fixtures/ROOT_IGNORE/.gitignore"), `/ignored-one
+	err := OverwriteFile(GetAbsPath(".fixtures/ROOT_IGNORE/.gitignore"), `/ignored-one
 /level-1/ignored-two
 /level-1/level-2/ignored-three
 ignored-four`)
 
 	assert.Nil(t, err)
 
-	filePaths, err := FindRecursively("/fixtures/ROOT_IGNORE")
+	filePaths, err := FindRecursively("/.fixtures/ROOT_IGNORE")
 
 	assert.Nil(t, err)
 	assert.NotNil(t, filePaths)
@@ -38,12 +38,12 @@ ignored-four`)
 }
 
 func TestFiles_findRecursively_Should_Ignore_Files_When_Sub_Ignore(t *testing.T) {
-	err := OverwriteFile(GetAbsPath("fixtures/SUB_IGNORE/.gitignore"), `/ignored-one`)
-	err = OverwriteFile(GetAbsPath("fixtures/SUB_IGNORE/level-1/.gitignore"), `/ignored-two
+	err := OverwriteFile(GetAbsPath(".fixtures/SUB_IGNORE/.gitignore"), `/ignored-one`)
+	err = OverwriteFile(GetAbsPath(".fixtures/SUB_IGNORE/level-1/.gitignore"), `/ignored-two
 /level-2/ignored-three`)
-	err = OverwriteFile(GetAbsPath("fixtures/SUB_IGNORE/level-1/level-2/.gitignore"), `ignored-four`)
+	err = OverwriteFile(GetAbsPath(".fixtures/SUB_IGNORE/level-1/level-2/.gitignore"), `ignored-four`)
 
-	filePaths, err := FindRecursively("/fixtures/SUB_IGNORE")
+	filePaths, err := FindRecursively("/.fixtures/SUB_IGNORE")
 
 	assert.Nil(t, err)
 	assert.NotNil(t, filePaths)

@@ -22,12 +22,12 @@ func Test_Who_Default_Codeowners_Print_Rule(t *testing.T) {
 }
 
 func Test_Who_Selected_Codeowners(t *testing.T) {
-	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"who", "-c fixtures/REFERENCE", "some-file.js"}...)
+	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"who", "-c .fixtures/REFERENCE", "some-file.js"}...)
 	cupaloy.SnapshotT(t, out)
 }
 
 func Test_Who_Selected_Codeowners_Print_Rule(t *testing.T) {
-	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"who", "-c fixtures/REFERENCE", "-r", "/docs/some-doc.txt"}...)
+	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"who", "-c .fixtures/REFERENCE", "-r", "/docs/some-doc.txt"}...)
 	cupaloy.SnapshotT(t, out)
 }
 
@@ -37,6 +37,6 @@ func Test_Who_Dir(t *testing.T) {
 }
 
 func Test_Who_Dir_Selected_Codeowners(t *testing.T) {
-	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"who", "-d fixtures", "-c fixtures/SIMPLE", "some-file.js"}...)
+	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"who", "-d .fixtures", "-c .fixtures/SIMPLE", "some-file.js"}...)
 	cupaloy.SnapshotT(t, out)
 }
