@@ -48,11 +48,14 @@ func runWho(cmd *cobra.Command, args []string) error {
 
 	switch output {
 	case "simple":
-		outputs.PrintSimple(cmd, []codeowners.CalcResult{result}, outputs.PrintOpts{Path: false, Owners: !printRule,  Rule: printRule})
+		outputs.PrintSimple(cmd, []codeowners.CalcResult{result}, outputs.PrintOpts{Path: false, Owners: !printRule, Rule: printRule})
 	case "csv":
 		outputs.PrintCsv(cmd, []codeowners.CalcResult{result}, outputs.PrintOpts{Path: true, Owners: true, Rule: printRule})
 	case "jsonl":
-		outputs.PrintJsonl(cmd, []codeowners.CalcResult{result})
+		err := outputs.PrintJsonl(cmd, []codeowners.CalcResult{result})
+		if err != nil {
+			return err
+		}
 	default:
 		return errors.New("output type not implemented")
 	}

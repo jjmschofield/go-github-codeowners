@@ -59,7 +59,11 @@ func runAudit(cmd *cobra.Command, args []string) error {
 	case "csv":
 		outputs.PrintCsv(cmd, result, outputs.PrintOpts{Path: true, Owners: true, Rule: printRule})
 	case "jsonl":
-		outputs.PrintJsonl(cmd, result)
+		err := outputs.PrintJsonl(cmd, result)
+		if err != nil{
+			return err
+		}
+
 	default:
 		return errors.New("output type not implemented")
 	}
