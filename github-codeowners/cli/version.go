@@ -4,14 +4,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func init() {
-	rootCmd.AddCommand(versionCmd)
+func VersionCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "version",
+		Short: "Prints the version number of github-codeowners",
+		RunE:  runVersion,
+	}
+
+	return cmd
 }
 
-var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Prints the version number of github-codeowners",
-	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Println("v0.0.1")
-	},
+func runVersion(cmd *cobra.Command, args []string) error {
+	cmd.Println("v0.0.1")
+	return nil
 }

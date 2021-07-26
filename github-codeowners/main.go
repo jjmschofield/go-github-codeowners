@@ -1,7 +1,16 @@
 package main
 
-import "github.com/jjmschofield/go-github-codeowners/github-codeowners/cli"
+import (
+	"fmt"
+	"github.com/jjmschofield/go-github-codeowners/github-codeowners/cli"
+	"os"
+)
 
-func main(){
-	cli.Execute()
+func main() {
+	root := cli.RootCmd()
+
+	if err := root.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }

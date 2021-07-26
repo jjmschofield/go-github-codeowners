@@ -7,6 +7,6 @@ import (
 )
 
 func Test_VersionNumber(t *testing.T) {
-	_, out, _ := internal.ExecuteCommand(rootCmd, "version")
+	_, out, _ := internal.ExecuteCommand(RootCmd(), "version")
 	cupaloy.SnapshotT(t, out)
 }
