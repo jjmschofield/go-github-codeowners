@@ -19,10 +19,6 @@ func RootCmd () *cobra.Command{
 	return cmd
 }
 
-func runRoot(cmd *cobra.Command, args []string) error {
-	return errors.New("specify a command to run")
-}
-
 func addFlags (cmd *cobra.Command){
 	cmd.PersistentFlags().StringP(
 		"codeowners",
@@ -35,4 +31,8 @@ func addFlags (cmd *cobra.Command){
 func addSubCommands (cmd *cobra.Command){
 	cmd.AddCommand(VersionCmd())
 	cmd.AddCommand(WhoCmd())
+}
+
+func runRoot(cmd *cobra.Command, args []string) error {
+	return errors.New("specify a command to run")
 }
