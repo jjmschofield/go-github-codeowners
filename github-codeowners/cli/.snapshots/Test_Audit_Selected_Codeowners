@@ -1,0 +1,8 @@
+.github/CODEOWNERS @jjmschofiled @jjmschofiled2 @jjmschofiled3
+build/logs/deep/recursive-root-dir-owner.log @jjmschofiled @jjmschofiled2 @jjmschofiled3
+build/logs/recursive-root-dir-owner.log @jjmschofiled @jjmschofiled2 @jjmschofiled3
+deep/apps/recursive-deep-dir-owner.ts @jjmschofiled @jjmschofiled2 @jjmschofiled3
+default-wildcard-owners.md @jjmschofiled @jjmschofiled2 @jjmschofiled3
+docs/non-recursive-dir-owner.md @jjmschofiled @jjmschofiled2 @jjmschofiled3
+src/ext-wildcard-owner.js @jjmschofiled @jjmschofiled2 @jjmschofiled3
+

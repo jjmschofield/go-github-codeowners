@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func findRecursively(path string) ([]string, error) {
+func FindRecursively(path string) ([]string, error) {
 	return walk(path, "", []foundIgnore{})
 }
 
@@ -49,11 +49,7 @@ func walk(root string, dir string, ignores []foundIgnore) ([]string, error) {
 			continue
 		}
 
-		if file.Name() == ".gitignore" {
-			continue
-		}
-
-		if file.IsDir() {
+		if file.IsDir() && file.Name() != ".git" {
 			children, err := walk(root, relativePath, ignores)
 
 			if err != nil {
@@ -70,6 +66,14 @@ func walk(root string, dir string, ignores []foundIgnore) ([]string, error) {
 }
 
 func isIgnored(file os.FileInfo, dir string, ignores []foundIgnore) bool{
+	if file.Name() == ".gitignore" {
+		return true
+	}
+
+	if file.IsDir() && file.Name() == ".git"{
+		return true
+	}
+
 	relativePath := filepath.Join(dir, file.Name())
 
 	for i := 0; i < len(ignores); i++ {

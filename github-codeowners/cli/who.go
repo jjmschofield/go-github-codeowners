@@ -10,7 +10,7 @@ import (
 func WhoCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "who",
-		Short:   "Prints the owner of the specified file",
+		Short:   "prints the owner of the specified file",
 		Example: "github-codewners who README.md",
 		Args:    cobra.ExactArgs(1),
 		RunE:    runWho,

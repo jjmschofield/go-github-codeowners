@@ -7,7 +7,7 @@ import (
 func VersionCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "version",
-		Short: "Prints the version number of github-codeowners",
+		Short: "prints the version number of github-codeowners",
 		RunE:  runVersion,
 	}
 

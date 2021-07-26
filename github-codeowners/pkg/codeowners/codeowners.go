@@ -20,6 +20,7 @@ type coRule struct {
 }
 
 type CalcResult struct {
+	Path   string
 	Owners []string
 	Rule   string
 }
@@ -30,13 +31,24 @@ func (c *Codeowners) CalcOwnership(path string) CalcResult {
 
 		if rule.matcher.MatchesPath(path) {
 			return CalcResult{
+				Path:   path,
 				Owners: rule.owners,
 				Rule:   rule.line,
 			}
 		}
 	}
 
-	return CalcResult{}
+	return CalcResult{Path: path}
+}
+
+func (c *Codeowners) CalcManyOwnerships(paths []string) []CalcResult {
+	var results []CalcResult
+
+	for i := 0; i < len(paths); i++ {
+		results = append(results, c.CalcOwnership(paths[i]))
+	}
+
+	return results
 }
 
 func FromFile(path string) (*Codeowners, error) {

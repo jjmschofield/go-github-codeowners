@@ -1,0 +1,8 @@
+.github/CODEOWNERS @global-owner1 @global-owner2
+build/logs/deep/recursive-root-dir-owner.log @doctocat
+build/logs/recursive-root-dir-owner.log @doctocat
+deep/apps/recursive-deep-dir-owner.ts @octocat
+default-wildcard-owners.md @global-owner1 @global-owner2
+docs/non-recursive-dir-owner.md @doctocat
+src/ext-wildcard-owner.js @js-owner
+

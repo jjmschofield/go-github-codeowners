@@ -6,15 +6,22 @@ import (
 	"strings"
 )
 
+func GetTrimmedFlag(cmd *cobra.Command, name string) (string, error) {
+	value, err := cmd.Flags().GetString(name)
+	return strings.TrimSpace(value), err
+}
+
 func GetCodeOwnersFilePath(cmd *cobra.Command) (string, error) {
-	rootPath, err := cmd.Flags().GetString("dir")
-	coPath, err := cmd.Flags().GetString("codeowners")
+	coPath, err := GetTrimmedFlag(cmd, "codeowners")
+	dirPath, err := GetTrimmedFlag(cmd, "dir")
 
 	if err != nil {
 		return "", err
 	}
 
-	result := path.Join(strings.TrimSpace(rootPath), strings.TrimSpace(coPath))
+	if coPath == ".github/CODEOWNERS" {
+		return path.Join(dirPath, coPath), nil
+	}
 
-	return result, nil
+	return coPath, nil
 }

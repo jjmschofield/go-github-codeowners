@@ -38,6 +38,7 @@ func addFlags (cmd *cobra.Command){
 func addSubCommands (cmd *cobra.Command){
 	cmd.AddCommand(VersionCmd())
 	cmd.AddCommand(WhoCmd())
+	cmd.AddCommand(AuditCmd())
 }
 
 func runRoot(cmd *cobra.Command, args []string) error {
