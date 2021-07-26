@@ -1,11 +1,11 @@
 package cli
 
 import (
+	"errors"
 	"github.com/jjmschofield/go-github-codeowners/github-codeowners/cli/internal"
 	"github.com/jjmschofield/go-github-codeowners/github-codeowners/pkg/codeowners"
 	"github.com/jjmschofield/go-github-codeowners/github-codeowners/pkg/files"
 	"github.com/spf13/cobra"
-	"strings"
 )
 
 func AuditCmd() *cobra.Command {
@@ -15,6 +15,9 @@ func AuditCmd() *cobra.Command {
 		Example: "github-codewners audit",
 		RunE:    runAudit,
 	}
+
+	cmd.Flags().BoolP("rule", "r", false, "print the rule which the file matched against")
+	cmd.Flags().StringP("output", "o", "simple", "how to output format eg: simple, jsonl, csv")
 
 	return cmd
 }
@@ -30,6 +33,16 @@ func runAudit(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	output, err := internal.GetOutput(cmd)
+	if err != nil {
+		return err
+	}
+
+	printRule, err := cmd.Flags().GetBool("rule")
+	if err != nil {
+		return err
+	}
+
 	co, err := codeowners.FromFile(coFilePath)
 	if err != nil {
 		return err
@@ -39,8 +52,15 @@ func runAudit(cmd *cobra.Command, args []string) error {
 
 	result := co.CalcManyOwnerships(paths)
 
-	for i:=0; i< len(result); i++{
-		cmd.Println(result[i].Path + " " + strings.Join(result[i].Owners, " ") )
+	switch output {
+	case "simple":
+		internal.PrintSimple(cmd, result, internal.PrintOpts{Path: true, Owners: !printRule,  Rule: printRule})
+	case "csv":
+		internal.PrintCsv(cmd, result, internal.PrintOpts{Path: true, Owners: true, Rule: printRule})
+	case "jsonl":
+		internal.PrintJsonl(cmd, result)
+	default:
+		return errors.New("output type not implemented")
 	}
 
 	return nil

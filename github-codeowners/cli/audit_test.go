@@ -32,6 +32,30 @@ func Test_Audit(t *testing.T) {
 	cupaloy.SnapshotT(t, out)
 }
 
+func Test_Audit_Print_Rule(t *testing.T) {
+	writeIgnores(t)
+	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-r"}...)
+	cupaloy.SnapshotT(t, out)
+}
+
+func Test_Audit_Csv(t *testing.T) {
+	writeIgnores(t)
+	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-o csv"}...)
+	cupaloy.SnapshotT(t, out)
+}
+
+func Test_Audit_Jsonl(t *testing.T) {
+	writeIgnores(t)
+	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-o jsonl"}...)
+	cupaloy.SnapshotT(t, out)
+}
+
+func Test_Audit_Csv_Print_Rule(t *testing.T) {
+	writeIgnores(t)
+	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-o csv", "-r"}...)
+	cupaloy.SnapshotT(t, out)
+}
+
 func Test_Audit_Selected_Codeowners(t *testing.T) {
 	writeIgnores(t)
 	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-c .fixtures/SIMPLE"}...)

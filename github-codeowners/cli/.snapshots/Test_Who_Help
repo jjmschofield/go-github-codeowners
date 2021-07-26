@@ -1,4 +1,4 @@
-prints the owner of the specified file
+lists the owner of the specified file
 
 Usage:
   github-codeowners who [flags]
@@ -7,8 +7,9 @@ Examples:
 github-codewners who README.md
 
 Flags:
-  -h, --help   help for who
-  -r, --rule   Print the rule which the file matched against
+  -h, --help            help for who
+  -o, --output string   how to output format eg: simple, jsonl, csv (default "simple")
+  -r, --rule            print the rule which the file matched against
 
 Global Flags:
   -c, --codeowners string   Path to the CODEOWNERS file relative to your current directory (default ".github/CODEOWNERS")

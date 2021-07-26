@@ -21,6 +21,21 @@ func Test_Who_Default_Codeowners_Print_Rule(t *testing.T) {
 	cupaloy.SnapshotT(t, out)
 }
 
+func Test_Who_Csv(t *testing.T) {
+	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"who", "README.md", "-o csv"}...)
+	cupaloy.SnapshotT(t, out)
+}
+
+func Test_Who_Csv_Print_Rule(t *testing.T) {
+	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"who", "README.md", "-o csv", "-r"}...)
+	cupaloy.SnapshotT(t, out)
+}
+
+func Test_Who_Jsonl(t *testing.T) {
+	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"who", "README.md", "-o jsonl"}...)
+	cupaloy.SnapshotT(t, out)
+}
+
 func Test_Who_Selected_Codeowners(t *testing.T) {
 	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"who", "-c .fixtures/REFERENCE", "some-file.js"}...)
 	cupaloy.SnapshotT(t, out)

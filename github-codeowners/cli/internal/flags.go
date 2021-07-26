@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"errors"
 	"github.com/spf13/cobra"
 	"path"
 	"strings"
@@ -24,4 +25,19 @@ func GetCodeOwnersFilePath(cmd *cobra.Command) (string, error) {
 	}
 
 	return coPath, nil
+}
+
+
+
+func GetOutput(cmd *cobra.Command) (string, error) {
+	output, err := GetTrimmedFlag(cmd, "output")
+	if err != nil {
+		return "", err
+	}
+
+	if output != "simple" && output != "csv" && output != "jsonl" {
+		return "", errors.New("output must be one of: simple, csv, jsonl")
+	}
+
+	return output, nil
 }

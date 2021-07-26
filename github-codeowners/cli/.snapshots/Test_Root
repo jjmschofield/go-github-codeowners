@@ -8,7 +8,7 @@ Available Commands:
   completion  generate the autocompletion script for the specified shell
   help        Help about any command
   version     prints the version number of github-codeowners
-  who         prints the owner of the specified file
+  who         lists the owner of the specified file
 
 Flags:
   -c, --codeowners string   Path to the CODEOWNERS file relative to your current directory (default ".github/CODEOWNERS")

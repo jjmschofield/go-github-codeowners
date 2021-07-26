@@ -7,7 +7,9 @@ Examples:
 github-codewners audit
 
 Flags:
-  -h, --help   help for audit
+  -h, --help            help for audit
+  -o, --output string   how to output format eg: simple, jsonl, csv (default "simple")
+  -r, --rule            print the rule which the file matched against
 
 Global Flags:
   -c, --codeowners string   Path to the CODEOWNERS file relative to your current directory (default ".github/CODEOWNERS")

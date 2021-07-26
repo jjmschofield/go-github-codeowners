@@ -20,9 +20,9 @@ type coRule struct {
 }
 
 type CalcResult struct {
-	Path   string
-	Owners []string
-	Rule   string
+	Path   string `json:"path,omitempty"`
+	Owners []string `json:"owners"`
+	Rule   string `json:"rule,omitempty"`
 }
 
 func (c *Codeowners) CalcOwnership(path string) CalcResult {

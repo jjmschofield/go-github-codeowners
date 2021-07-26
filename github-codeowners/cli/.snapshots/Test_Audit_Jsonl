@@ -1,0 +1,8 @@
+{"path":".github/CODEOWNERS","owners":["@global-owner1","@global-owner2"],"rule":"*       @global-owner1 @global-owner2"}
+{"path":"build/logs/deep/recursive-root-dir-owner.log","owners":["@doctocat"],"rule":"/build/logs/ @doctocat"}
+{"path":"build/logs/recursive-root-dir-owner.log","owners":["@doctocat"],"rule":"/build/logs/ @doctocat"}
+{"path":"deep/apps/recursive-deep-dir-owner.ts","owners":["@octocat"],"rule":"apps/ @octocat"}
+{"path":"default-wildcard-owners.md","owners":["@global-owner1","@global-owner2"],"rule":"*       @global-owner1 @global-owner2"}
+{"path":"docs/non-recursive-dir-owner.md","owners":["@doctocat"],"rule":"/docs/ @doctocat"}
+{"path":"src/ext-wildcard-owner.js","owners":["@js-owner"],"rule":"*.js    @js-owner"}
+
