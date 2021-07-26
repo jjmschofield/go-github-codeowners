@@ -1,0 +1,18 @@
+Error: specify a command to run
+Usage:
+  github-codeowners [flags]
+  github-codeowners [command]
+
+Available Commands:
+  completion  generate the autocompletion script for the specified shell
+  help        Help about any command
+  version     Prints the version number of github-codeowners
+  who         Prints the owner of the specified file
+
+Flags:
+  -c, --codeowners string   Path to the CODEOWNERS file relative to your current directory (default ".github/CODEOWNERS")
+  -h, --help                help for github-codeowners
+
+Use "github-codeowners [command] --help" for more information about a command.
+
+
