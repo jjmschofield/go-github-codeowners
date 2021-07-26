@@ -1,4 +1,4 @@
-package internal
+package outputs
 
 import (
 	"encoding/json"

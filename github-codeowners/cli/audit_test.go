@@ -2,14 +2,14 @@ package cli
 
 import (
 	"github.com/bradleyjkemp/cupaloy"
-	"github.com/jjmschofield/go-github-codeowners/github-codeowners/cli/internal"
+	"github.com/jjmschofield/go-github-codeowners/github-codeowners/cli/internal/test"
 	"github.com/jjmschofield/go-github-codeowners/github-codeowners/pkg/files"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func Test_Audit_Help(t *testing.T) {
-	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "--help"}...)
+	_, out, _ := test.ExecuteCommand(RootCmd(), []string{"audit", "--help"}...)
 	cupaloy.SnapshotT(t, out)
 }
 
@@ -28,37 +28,37 @@ ignored-by-nested-rule.txt`)
 
 func Test_Audit(t *testing.T) {
 	writeIgnores(t)
-	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT"}...)
+	_, out, _ := test.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT"}...)
 	cupaloy.SnapshotT(t, out)
 }
 
 func Test_Audit_Print_Rule(t *testing.T) {
 	writeIgnores(t)
-	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-r"}...)
+	_, out, _ := test.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-r"}...)
 	cupaloy.SnapshotT(t, out)
 }
 
 func Test_Audit_Csv(t *testing.T) {
 	writeIgnores(t)
-	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-o csv"}...)
+	_, out, _ := test.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-o csv"}...)
 	cupaloy.SnapshotT(t, out)
 }
 
 func Test_Audit_Jsonl(t *testing.T) {
 	writeIgnores(t)
-	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-o jsonl"}...)
+	_, out, _ := test.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-o jsonl"}...)
 	cupaloy.SnapshotT(t, out)
 }
 
 func Test_Audit_Csv_Print_Rule(t *testing.T) {
 	writeIgnores(t)
-	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-o csv", "-r"}...)
+	_, out, _ := test.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-o csv", "-r"}...)
 	cupaloy.SnapshotT(t, out)
 }
 
 func Test_Audit_Selected_Codeowners(t *testing.T) {
 	writeIgnores(t)
-	_, out, _ := internal.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-c .fixtures/SIMPLE"}...)
+	_, out, _ := test.ExecuteCommand(RootCmd(), []string{"audit", "-d .fixtures/COMPLEX_PROJECT", "-c .fixtures/SIMPLE"}...)
 	cupaloy.SnapshotT(t, out)
 }
 

@@ -2,7 +2,8 @@ package cli
 
 import (
 	"errors"
-	"github.com/jjmschofield/go-github-codeowners/github-codeowners/cli/internal"
+	"github.com/jjmschofield/go-github-codeowners/github-codeowners/cli/internal/flags"
+	"github.com/jjmschofield/go-github-codeowners/github-codeowners/cli/internal/outputs"
 	"github.com/jjmschofield/go-github-codeowners/github-codeowners/pkg/codeowners"
 	"github.com/spf13/cobra"
 )
@@ -23,7 +24,7 @@ func WhoCmd() *cobra.Command {
 }
 
 func runWho(cmd *cobra.Command, args []string) error {
-	coFilePath, err := internal.GetCodeOwnersFilePath(cmd)
+	coFilePath, err := flags.GetCodeOwnersFilePath(cmd)
 	if err != nil {
 		return err
 	}
@@ -33,7 +34,7 @@ func runWho(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	output, err := internal.GetOutput(cmd)
+	output, err := flags.GetOutput(cmd)
 	if err != nil {
 		return err
 	}
@@ -47,11 +48,11 @@ func runWho(cmd *cobra.Command, args []string) error {
 
 	switch output {
 	case "simple":
-		internal.PrintSimple(cmd, []codeowners.CalcResult{result}, internal.PrintOpts{Path: false, Owners: !printRule,  Rule: printRule})
+		outputs.PrintSimple(cmd, []codeowners.CalcResult{result}, outputs.PrintOpts{Path: false, Owners: !printRule,  Rule: printRule})
 	case "csv":
-		internal.PrintCsv(cmd, []codeowners.CalcResult{result}, internal.PrintOpts{Path: true, Owners: true, Rule: printRule})
+		outputs.PrintCsv(cmd, []codeowners.CalcResult{result}, outputs.PrintOpts{Path: true, Owners: true, Rule: printRule})
 	case "jsonl":
-		internal.PrintJsonl(cmd, []codeowners.CalcResult{result})
+		outputs.PrintJsonl(cmd, []codeowners.CalcResult{result})
 	default:
 		return errors.New("output type not implemented")
 	}
