@@ -16,7 +16,7 @@ type PrintOpts struct {
 func PrintSimple(cmd *cobra.Command, results []codeowners.CalcResult, opts PrintOpts) {
 	for i := 0; i < len(results); i++ {
 		toPrint := resultToSlice(results[i], opts)
-		cmd.Println(strings.Join(toPrint, " "))
+		cmd.Println(strings.Join(toPrint, "\t"))
 	}
 }
 
